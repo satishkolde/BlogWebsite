@@ -1,0 +1,89 @@
+import axios from "axios";
+import { useState, useEffect } from "react";
+import { useParams, useNavigate, Link } from "react-router";
+
+export default function BlogCreate() {
+  const { id } = useParams();
+  const navigator = useNavigate();
+  const [formData, setFormData] = useState({
+    title: "",
+    body: "",
+  });
+
+  const [is_publised,setIsPublised] = useState(false);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    if(name === "title" && value.length > 100) {
+      return;
+    }
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const createBlog = async () => {
+    try {
+      const response = await axios.post("/api/v1/blog/", {...formData,is_publised});
+      const id = response.data.data.blog._id;
+      navigator(`/article/${id}`);
+    } catch (e) {
+      navigator("/");
+    }
+  };
+
+  return (
+    <div className="mt-[96px] px-[286px]">
+      <div className="flex flex-row justify-start">
+        <Link to="/" className="text-blue-600 underline">
+          Go to home
+        </Link>
+      </div>
+      <div className="flex flex-col gap-2">
+        <div className="flex flex-row gap-1 mt-2">
+          <h1 className="font-bold text-2xl">Create new blog</h1>
+        </div>
+        <div className="flex flex-col justify-start">
+          <label>Blog Title(max 100 character): </label>
+          <input
+            type="text"
+            name="title"
+            value={formData.title}
+            className="outline-none p-1 bg-blue-200 rounded-md"
+            onChange={handleChange}
+          />
+        </div>
+        <div>
+          <label>Blog Body: </label>
+          <textarea
+            className="w-full h-[286px] outline-none p-1 bg-blue-200 rounded-md resize-none"
+            name="body"
+            value={formData.body}
+            onChange={handleChange}
+          />
+        </div>
+        <div className="flex flex-row items-center gap-2">
+          <input
+            type="checkbox"
+            name="is_publised"
+            id="publised"
+            checked={is_publised}
+            className="bg-blue-600 accent-blue-600 w-[16px] h-[16px] cursor-pointer"
+            onChange={() => setIsPublised((prev) => !prev)}
+          />
+          <label htmlFor="publised" className="cursor-pointer">Publish</label>
+        </div>
+        <div>
+          <p className="text-red-500 font-semibold"></p>
+        </div>
+        <button
+          className="p-2 bg-blue-600 rounded-md text-white font-semibold cursor-pointer"
+          onClick={createBlog}
+        >
+          Create
+        </button>
+      </div>
+    </div>
+  );
+}
