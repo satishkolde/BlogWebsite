@@ -13,7 +13,7 @@ export const registerUserController = asyncHandler(async (req, res) => {
     const duplicateUser = await User.findOne({ username });
 
     if (duplicateUser) {
-        throw new ApiError(400, "User already exist");
+        throw new ApiError(409, "User already exist");
     }
 
     const user = await User.create({ username, password });
@@ -35,14 +35,14 @@ export const registerUserController = asyncHandler(async (req, res) => {
         secure: true
     }
 
-    res.status(200).cookie("accessToken", accessToken, cookieOptions).send(new ApiResponse(200, "Created User successfully", createdUser));
+    res.status(201).cookie("accessToken", accessToken, cookieOptions).send(new ApiResponse(201, "Created User successfully", createdUser));
 });
 
 export const loginUserController = asyncHandler(async (req, res) => {
     const { username, password } = req.body;
 
     if (!username || !password || username.trim() === "" || password.trim() === "") {
-        throw new ApiError(400, "Invalid credentials");
+        throw new ApiError(401, "Invalid credentials");
     }
     
     const createdUser = await User.findOne({
@@ -56,7 +56,7 @@ export const loginUserController = asyncHandler(async (req, res) => {
     const isPasswordCorrect = await createdUser.isPasswordCorrect(password);
 
     if(!isPasswordCorrect) {
-        throw new ApiError(400, "Invalid Credentials");
+        throw new ApiError(401, "Invalid Credentials");
     }
 
     const accessToken = createdUser.generateAccessToken();

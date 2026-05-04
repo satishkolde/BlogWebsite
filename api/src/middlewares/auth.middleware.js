@@ -7,19 +7,24 @@ export const verifyJwt = asyncHandler(async (req, res, next) => {
     const accessToken = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ","");
 
     if(!accessToken) {
-        throw new ApiError(400,"Accesstoken not found");
+        throw new ApiError(401,"Accesstoken not found");
     }
 
-    const decoded = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SCERET_KEY);
+    let decoded;
+    try {
+        decoded = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SCERET_KEY);
+    } catch (error) {
+        throw new ApiError(401, "Invalid or expired access token");
+    }
 
     if(!decoded) {
-        throw new ApiError(500, "Internal Server Error While decoding the Jwt token");
+        throw new ApiError(401, "Invalid access token");
     }
 
     const user = await User.findOne({username:decoded.username}).select("-password");
 
     if(!user) {
-        throw new ApiError(400, "User no longer Exist");
+        throw new ApiError(404, "User no longer Exist");
     }
 
     req.user = user;

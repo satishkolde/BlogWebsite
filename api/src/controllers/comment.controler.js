@@ -14,7 +14,7 @@ export const addComment = asyncHandler(async (req, res) => {
     const blog = await Blog.findById(id);
 
     if(!blog) {
-        throw new ApiError(400, "Blog not found");
+        throw new ApiError(404, "Blog not found");
     }
 
     if(!blog.comments) {
@@ -40,7 +40,7 @@ export const addComment = asyncHandler(async (req, res) => {
         throw new ApiError(500, "Internal Server Error while updating blog");
     }
 
-    res.status(200).send(new ApiResponse(200, "Added Comment"));
+    res.status(201).send(new ApiResponse(201, "Added Comment"));
 });
 
 export const getComments = asyncHandler(async (req, res) => {

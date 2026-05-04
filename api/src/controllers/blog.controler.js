@@ -88,7 +88,7 @@ export const createBlogController = asyncHandler(async (req, res) => {
     const duplicateBlog = await Blog.findOne({title:title,author:req.user._id});
 
     if(duplicateBlog) {
-        throw new ApiError(400,"Blog already exist");
+        throw new ApiError(409,"Blog already exist");
     }
 
     const currentDate = (is_publised)? (new Date()): undefined;
@@ -107,7 +107,7 @@ export const createBlogController = asyncHandler(async (req, res) => {
         throw new ApiError(500, "Internal Server Error while creating the blog");
     }
 
-    res.status(200).send(new ApiResponse(200,"Created Blog successfully",{blog,author:req.user}));
+    res.status(201).send(new ApiResponse(201,"Created Blog successfully",{blog,author:req.user}));
 });
 
 export const updateBlogController = asyncHandler(async (req, res) => {
@@ -121,7 +121,7 @@ export const updateBlogController = asyncHandler(async (req, res) => {
     const blog = await Blog.findOne({title,author:req.user._id});
     
     if(!blog) {
-        throw new ApiError("Blog not found for the user");
+        throw new ApiError(404,"Blog not found for the user");
     }
     
     const currentDate = (is_publised)? (new Date()): undefined;
@@ -139,7 +139,7 @@ export const updateBlogController = asyncHandler(async (req, res) => {
     
     delete sendData.author;
 
-    res.status(200).send(new ApiResponse(200,"Created Blog successfully",{blog:sendData,author:req.user}));
+    res.status(200).send(new ApiResponse(200,"Updated Blog successfully",{blog:sendData,author:req.user}));
 });
 
 export const deleteBlogController = asyncHandler(async (req, res) => {
@@ -152,9 +152,9 @@ export const deleteBlogController = asyncHandler(async (req, res) => {
     const blog = await Blog.findOneAndDelete({title:blogTitle, author:req.user._id});
 
     if(!blog) {
-        throw new ApiError(400, "Blog doesn't exist");
+        throw new ApiError(404, "Blog doesn't exist");
     }
 
-    res.status(200).send(new ApiResponse(200,"Deleted Blog successfully",{}));
+    res.status(204).send();
 });
 
