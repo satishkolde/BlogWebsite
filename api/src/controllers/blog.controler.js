@@ -26,7 +26,7 @@ export const getUserPrivateBlogsController = asyncHandler(async (req, res) => {
 });
 
 export const getUserPublicBlogController = asyncHandler(async (req, res) => {
-    const {username} = req.params?.username;
+    const {username} = req.params;
 
     if(!username || username.trim() === '') {
         throw new ApiError(400,"Username is requiered");
