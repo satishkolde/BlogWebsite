@@ -10,6 +10,9 @@ import Register from './components/Register.jsx'
 import Login from './Login.jsx'
 import Blog from './components/Blog.jsx'
 import BlogCreate from './components/BlogCreate.jsx'
+import axios from 'axios'
+
+axios.defaults.withCredentials = true;
 
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>
