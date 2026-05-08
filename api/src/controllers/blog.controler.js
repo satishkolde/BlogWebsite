@@ -157,7 +157,7 @@ export const updateBlogController = asyncHandler(async (req, res) => {
     }
 
     if(is_published) {
-        blog.is_publised = is_published;
+        blog.is_published = is_published;
     }
     const updatedBlog = (await blog.save()).toJSON();
     delete updatedBlog.author;

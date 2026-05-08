@@ -12,7 +12,7 @@ export class User extends Model {
         return jwt.sign({
             _id: this._id,
             username: this.username
-        }, process.env.ACCESS_TOKEN_SCERET_KEY, { expiresIn: process.env.ACCESS_TOKEN_EXPIRE_IN });
+        }, process.env.ACCESS_TOKEN_SECRET_KEY, { expiresIn: process.env.ACCESS_TOKEN_EXPIRE_IN });
     }
 }
 
