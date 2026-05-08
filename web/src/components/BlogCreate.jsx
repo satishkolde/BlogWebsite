@@ -10,7 +10,7 @@ export default function BlogCreate() {
     body: "",
   });
 
-  const [is_publised,setIsPublised] = useState(false);
+  const [is_published,setIsPublished] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -25,8 +25,8 @@ export default function BlogCreate() {
 
   const createBlog = async () => {
     try {
-      const response = await axios.post("/api/v1/blog/", {...formData,is_publised});
-      const id = response.data.data.blog._id;
+      const response = await axios.post("/api/v1/blog/", {...formData,is_published});
+      const id = response.data.data.blog.id;
       navigator(`/article/${id}`);
     } catch (e) {
       navigator("/");
@@ -66,11 +66,11 @@ export default function BlogCreate() {
         <div className="flex flex-row items-center gap-2">
           <input
             type="checkbox"
-            name="is_publised"
+            name="is_published"
             id="publised"
-            checked={is_publised}
+            checked={is_published}
             className="bg-blue-600 accent-blue-600 w-[16px] h-[16px] cursor-pointer"
-            onChange={() => setIsPublised((prev) => !prev)}
+            onChange={() => setIsPublished((prev) => !prev)}
           />
           <label htmlFor="publised" className="cursor-pointer">Publish</label>
         </div>
