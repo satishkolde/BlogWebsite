@@ -7,7 +7,7 @@ import Layout from './Layout.jsx'
 import BlogList from './components/BlogList.jsx'
 import AuthLayout from './AuthLayout.jsx'
 import Register from './components/Register.jsx'
-import Login from './Login.jsx'
+import Login from './components/Login.jsx'
 import Blog from './components/Blog.jsx'
 import BlogCreate from './components/BlogCreate.jsx'
 import axios from 'axios'
@@ -20,7 +20,7 @@ createRoot(document.getElementById('root')).render(
       <Route path="/" element={<Layout />}>
         <Route index element={<BlogList pageTitle="Blog" endpoint="/api/v1/blog/pagination?page=" />} />
         <Route path="myposts" element={<BlogList pageTitle="My" endpoint="/api/v1/blog/me?page=" />} />
-        <Route path="/:username" element={<BlogList pageTitle="" endpoint="/api/v1/blog/me?page=" />} />
+        <Route path="/:username" element={<BlogList pageTitle="" endpoint="" />} />
         <Route path="article/:id" element={<Blog />} />
         <Route path="create" element={<BlogCreate isUpdate={false} endpoint="/api/v1/blog/"  />} />
       </Route>
