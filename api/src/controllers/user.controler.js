@@ -18,7 +18,9 @@ export const registerUserController = asyncHandler(async (req, res) => {
 
     const user = await User.create({ username, password });
 
-    const createdUser = await User.findById(user._id).select("-password");
+    const createdUser = (await User.findByPk(username, {attributes:{
+        exclude: ['password']
+    }}));
 
     if (!createdUser) {
         throw new ApiError(500, "Internal Server Error While creating the user");
@@ -45,9 +47,7 @@ export const loginUserController = asyncHandler(async (req, res) => {
         throw new ApiError(401, "Invalid credentials");
     }
     
-    const createdUser = await User.findOne({
-        username
-    });
+    const createdUser = await User.findByPk(username);
 
     if(!createdUser) {
         throw new ApiError(404, "User didn't Exist");
@@ -65,12 +65,15 @@ export const loginUserController = asyncHandler(async (req, res) => {
         throw new ApiError(500, "Internal Server Error while creating the accessToken");
     }
 
+    const sendUser = createdUser.toJSON();
+    delete sendUser.password;
+
     const cookieOptions = {
         httpOnly: true,
         secure: true
     }
 
-    res.status(200).cookie("accessToken", accessToken, cookieOptions).send(new ApiResponse(200, "User login Successfully", createdUser));
+    res.status(200).cookie("accessToken", accessToken, cookieOptions).send(new ApiResponse(200, "User login Successfully", sendUser));
 });
 
 export const logoutUserController = asyncHandler((req, res)=>{

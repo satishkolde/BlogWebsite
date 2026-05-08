@@ -1,33 +1,44 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { sequelizeInstance } from '../db/index.js';
+import { DataTypes, Model } from 'sequelize';
 
-const userSchema = new mongoose.Schema({
+export class User extends Model {
+    async isPasswordCorrect(password) {
+        return await bcrypt.compare(password, this.password);
+    }
+
+    generateAccessToken() {
+        return jwt.sign({
+            _id: this._id,
+            username: this.username
+        }, process.env.ACCESS_TOKEN_SCERET_KEY, { expiresIn: process.env.ACCESS_TOKEN_EXPIRE_IN });
+    }
+}
+
+User.init({
     username: {
-        type: String,
+        type: DataTypes.STRING,
         unique: true,
-        required: true
+        primaryKey: true
     },
     password: {
-        type: String,
-        requried: true
+        type: DataTypes.STRING,
+        allowNull: false,
+    }
+},{
+    sequelize: sequelizeInstance,
+    timestamps: true,
+    tableName:  "users",
+    hooks: {
+        beforeSave: async (user) => {
+            if(!user.changed('password')) return;
+            user.password = await bcrypt.hash(user.password, 10);
+        }
     }
 });
 
-userSchema.pre("save", async function (){
-    if(!this.isModified('password')) return;
-    this.password = await bcrypt.hash(this.password, 10);
-});
-
-userSchema.methods.isPasswordCorrect = async function(password) {
-    return await bcrypt.compare(password, this.password);
-}
-
-userSchema.methods.generateAccessToken = function() {
-    return jwt.sign({
-        _id: this._id,
-        username: this.username
-    },process.env.ACCESS_TOKEN_SCERET_KEY,{expiresIn:process.env.ACCESS_TOKEN_EXPIRE_IN});
-}
-
-export const User = mongoose.model("User", userSchema);
+(async () => {
+    await sequelizeInstance.sync();
+})();
