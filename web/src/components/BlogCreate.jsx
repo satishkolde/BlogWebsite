@@ -67,12 +67,12 @@ export default function BlogCreate() {
           <input
             type="checkbox"
             name="is_published"
-            id="publised"
+            id="published"
             checked={is_published}
             className="bg-blue-600 accent-blue-600 w-[16px] h-[16px] cursor-pointer"
             onChange={() => setIsPublished((prev) => !prev)}
           />
-          <label htmlFor="publised" className="cursor-pointer">Publish</label>
+          <label htmlFor="published" className="cursor-pointer">Publish</label>
         </div>
         <div>
           <p className="text-red-500 font-semibold"></p>
