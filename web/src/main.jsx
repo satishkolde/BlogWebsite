@@ -18,8 +18,9 @@ createRoot(document.getElementById('root')).render(
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<Layout />}>
-        <Route index element={<BlogList pageTitle="Blog Posts" endpoint="/api/v1/blog/pagination?page=" />} />
-        <Route path="myposts" element={<BlogList pageTitle="My Posts" endpoint="/api/v1/blog/me?page=" />} />
+        <Route index element={<BlogList pageTitle="Blog" endpoint="/api/v1/blog/pagination?page=" />} />
+        <Route path="myposts" element={<BlogList pageTitle="My" endpoint="/api/v1/blog/me?page=" />} />
+        <Route path="/:username" element={<BlogList pageTitle="" endpoint="/api/v1/blog/me?page=" />} />
         <Route path="article/:id" element={<Blog />} />
         <Route path="create" element={<BlogCreate isUpdate={false} endpoint="/api/v1/blog/"  />} />
       </Route>
