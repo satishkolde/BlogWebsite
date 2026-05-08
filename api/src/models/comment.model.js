@@ -1,14 +1,39 @@
-import mongoose from "mongoose";
+import { Model, DataTypes } from "sequelize";
+import { sequelizeInstance } from "../db/index.js";
 
-const commentSchema = new mongoose.Schema({
+export class Comment extends Model {}
+
+Comment.init({
+    id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true
+    },
     author: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
+        type: DataTypes.STRING,
+        refrences: {
+            model: "users",
+            key: "username"
+        },
+        allowNull: false
+    },
+    blog: {
+        type: DataTypes.UUID,
+        refrences: {
+            model: "blogs",
+            key: "id"
+        },
+        allowNull: false
     },
     message: {
-        type: String,
-        required: true
+        type: DataTypes.STRING,
+        allowNull: false
     }
-}, {timestamps: true});
+}, {
+    sequelize: sequelizeInstance,
+    tableName: "comments"
+});
 
-export const Comment = mongoose.model("Comment", commentSchema);
+(async () => {
+    await sequelizeInstance.sync();
+})();
