@@ -61,9 +61,6 @@ export const getUserPublicBlogController = asyncHandler(async (req, res) => {
 
     const pageCount = Math.ceil(count/limitBlogs);
     res.status(200).send(new ApiResponse(200,"Got All the blogs",{blogs:rows,count:pageCount}));
-
-
-    res.status(200).send(new ApiResponse(200,"Got All the blogs",{blogs}));
 });
 
 export const getSpecificBlogController = asyncHandler(async (req, res) => {
@@ -102,7 +99,7 @@ export const getPaginatedBlogsController = asyncHandler(async (req, res) => {
 
 export const createBlogController = asyncHandler(async (req, res) => {
     const {title, body} = req.body;
-    const is_publised = req.body?.is_publised || false;
+    const is_published = req.body?.is_published || false;
     if(!title || !body || title.trim() === "" || body.trim() === ""){
         throw new ApiError(400, "Title or Body shouldn't empty");
     }
@@ -124,7 +121,7 @@ export const createBlogController = asyncHandler(async (req, res) => {
     const blog = await Blog.create({
         title:title,
         body:body,
-        is_publised:is_publised,
+        is_published:is_published,
         author:req.user.username,
     });
 
