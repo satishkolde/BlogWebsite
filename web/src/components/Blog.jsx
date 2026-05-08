@@ -79,7 +79,7 @@ export default function Blog() {
               {comments.map((comment) => {
               return (
                 <div key={comment.author}>
-                  <p className="underline font-semibold">{comment.author}</p>
+                  <Link className="underline font-semibold" to={`/${comment.author}`}>{comment.author}</Link>
                   <p className="line-clamp-2 text-wrap pl-2">{comment.message}</p>
                 </div>
               );
