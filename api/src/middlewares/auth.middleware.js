@@ -21,7 +21,11 @@ export const verifyJwt = asyncHandler(async (req, res, next) => {
         throw new ApiError(401, "Invalid access token");
     }
 
-    const user = await User.findOne({username:decoded.username}).select("-password");
+    const user = await User.findByPk(decoded.username, {
+        attributes: {
+            exclude: ["password"]
+        }
+    });
 
     if(!user) {
         throw new ApiError(404, "User no longer Exist");
