@@ -83,7 +83,9 @@ export const getPaginatedBlogsController = asyncHandler(async (req, res) => {
     const limitBlogs = 5;
     const skipBlogs = (Number(page) - 1)*limitBlogs;
     const {count, rows} = await Blog.findAndCountAll({
-        where: {},
+        where: {
+            is_published: true
+        },
         offset: skipBlogs,
         limit: limitBlogs
     });
