@@ -48,8 +48,8 @@ export const getUserPublicBlogController = asyncHandler(async (req, res) => {
     const skipBlogs = (Number(page) - 1)*limitBlogs;
     const {count, rows} = await Blog.findAndCountAll({
         where: {
-            author: req.user.username,
-            is_publised: true
+            author: username,
+            is_published: true
         },
         offset: skipBlogs,
         limit: limitBlogs
@@ -86,9 +86,7 @@ export const getPaginatedBlogsController = asyncHandler(async (req, res) => {
     const limitBlogs = 5;
     const skipBlogs = (Number(page) - 1)*limitBlogs;
     const {count, rows} = await Blog.findAndCountAll({
-        where: {
-            author: req.user.username
-        },
+        where: {},
         offset: skipBlogs,
         limit: limitBlogs
     });
@@ -96,7 +94,7 @@ export const getPaginatedBlogsController = asyncHandler(async (req, res) => {
     if(!rows){
         throw new ApiError(500, "Internal Server Error when finding the blogs");
     }
-    
+
     const pageCount = Math.ceil(count/limitBlogs);
 
     res.status(200).send(new ApiResponse(200,"Got All the blogs",{blogs:rows,count:pageCount}));
