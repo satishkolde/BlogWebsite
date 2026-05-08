@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import {useNavigate} from 'react-router';
+import {useNavigate, useParams} from 'react-router';
 import axios from 'axios';
 import { Link } from "react-router";
 
@@ -8,11 +8,17 @@ export default function BlogList({pageTitle, endpoint, operations}) {
     const navigator = useNavigate();
     const [currentPage, setCurrentPage] = useState(1);
     const [pageCount, setPageCount] = useState(1);
+    const {username} = useParams();
 
     useEffect(() => {
         async function loadBlogs() {
             try {
-                const response = await axios.get(endpoint+currentPage);
+                let response;
+                if(username) {
+                    response = await axios.get(`/api/v1/blog/${username}?page=`+currentPage);
+                }else {
+                    response = await axios.get(endpoint+currentPage);
+                }
                 setBlogs(response.data.data.blogs); 
                 setPageCount(response.data.data.count);
             } catch (e) {
@@ -30,7 +36,7 @@ export default function BlogList({pageTitle, endpoint, operations}) {
       <div className="mt-[96px] flex justify-center items-center px-[286px]">
         <div className="w-full">
           <div>
-            <h1 className="text-3xl font-bold">{pageTitle}</h1>
+            <h1 className="text-3xl font-bold">{pageTitle === "" ? username+"'s" : pageTitle} Posts</h1>
           </div>
           <div className="h-[386px] flex flex-col gap-2 justify-start mt-2">
             {blogs.length === 0 && (
@@ -40,9 +46,9 @@ export default function BlogList({pageTitle, endpoint, operations}) {
             )}
             {blogs.map((blog) => {
               return (
-                <div key={blog._id}>
+                <div key={blog.id}>
                   <Link
-                    to={`/article/${blog._id}`}
+                    to={`/article/${blog.id}`}
                     className="underline text-blue-600"
                   >
                     {blog.title}
