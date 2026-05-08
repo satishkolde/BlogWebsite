@@ -28,7 +28,7 @@ export default function Register() {
             <div className="flex flex-col items-center gap-2 border-b-2 pb-3">
                 <h1 className="font-bold text-xl text-white">Create a New Account</h1>
                 <input type="text" className="rounded-md p-2 w-full outline-none bg-white" name="username" placeholder="username" value={formData.username} onChange={handleFormDataChange} /> 
-                <input type="text" className="rounded-md p-2 w-full outline-none bg-white" name="password" placeholder="password" value={formData.password} onChange={handleFormDataChange} />
+                <input type="password" className="rounded-md p-2 w-full outline-none bg-white" name="password" placeholder="password" value={formData.password} onChange={handleFormDataChange} />
                 {errorText && <p className="text-red-500">{errorText}</p>}
                 <button className="bg-blue-500 text-white p-2 rounded-md font-semibold cursor-pointer" onClick={registerUser}>Register</button> 
             </div>
