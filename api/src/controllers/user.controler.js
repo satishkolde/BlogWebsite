@@ -10,7 +10,7 @@ export const registerUserController = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Invalid credentials");
     }
 
-    const duplicateUser = await User.findOne({ username });
+    const duplicateUser = await User.findByPk(username);
 
     if (duplicateUser) {
         throw new ApiError(409, "User already exist");
