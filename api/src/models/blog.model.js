@@ -1,30 +1,45 @@
-import mongoose from "mongoose";
+import { sequelizeInstance } from "../db/index.js";
+import { Model, DataTypes, DATEONLY } from "sequelize";
+import { User } from "./user.model.js";
 
-const blogSchema = new mongoose.Schema({
+export class Blog extends Model {}
+
+Blog.init({
+    id: {
+        type: DataTypes.UUID,
+        primaryKey: true,
+        defaultValue: DataTypes.UUIDV4
+    },
     title: {
-        type: String,
-        required: true,
-        maxLength: [100, "Blog title can't be greater than 100 characters"]
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+            max: 100
+        }
     },
     body: {
-        type: String,
-        required: true
+        type: DataTypes.TEXT,
+        allowNull: false
     },
     author: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
+        type: DataTypes.STRING,
+        references: {
+            model: 'users',
+            key: 'username'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
     },
-    is_publised: {
-        type: Boolean,
-        default: false
-    },
-    published_at: {
-        type: Date,
-    },
-    comments: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Comment"
-    }]
-}, {timestamps: true});
+    is_published: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true
+    }
+},{
+    sequelize: sequelizeInstance,
+    timestamps: true,
+    tableName: "blogs"
+});
 
-export const Blog = mongoose.model("Blog", blogSchema);
+(async () => {
+    await sequelizeInstance.sync();
+})();
