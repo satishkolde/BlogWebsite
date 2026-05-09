@@ -48,7 +48,7 @@ export const getUserPublicBlogController = asyncHandler(async (req, res) => {
 });
 
 export const getSpecificBlogController = asyncHandler(async (req, res) => {
-    const id = req.body?.id;
+    const id = req.params?.id;
     
     const blog = await BlogService.getSpecificBlog(req.user.username,id);
     
@@ -58,7 +58,6 @@ export const getSpecificBlogController = asyncHandler(async (req, res) => {
 export const getPaginatedBlogsController = asyncHandler(async (req, res) => {
     const page = Number(req.query?.page) || 1;
     const title = req.query?.title;
-    console.log(title);
     const query = {
         is_published: true
     };

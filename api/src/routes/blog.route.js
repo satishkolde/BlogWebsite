@@ -8,9 +8,9 @@ route.use(verifyJwt);
 route.route("/me").get(getUserPrivateBlogsController);
 route.route("/pagination").get(getPaginatedBlogsController);
 route.route("/:username").get(getUserPublicBlogController);
-route.route("/specific").post(getSpecificBlogController);
+route.route("/specific/:id").get(getSpecificBlogController);
 route.route("/").post(createBlogController);
-route.route("/:id").delete(deleteBlogController);
 route.route("/:id").patch(updateBlogController);
+route.route("/:id").delete(deleteBlogController);
 
 export default route;
