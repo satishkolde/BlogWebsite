@@ -2,25 +2,32 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import axios from "axios";
 import { Link } from "react-router";
+import { MdCancel } from "react-icons/md";
+import { GoPencil } from "react-icons/go";
+import { FaRegTrashAlt } from "react-icons/fa";
 
 export default function BlogList({ pageTitle, endpoint, operations }) {
   const [blogs, setBlogs] = useState([]);
   const navigator = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [pageCount, setPageCount] = useState(1);
+  const [searchTitle, setSearchTitle] = useState("");
+  const [triggerChange, setTriggerChange] = useState(false);
   const { username } = useParams();
 
   useEffect(() => {
     async function loadBlogs() {
       try {
-        let response;
+        let url;
         if (username) {
-          response = await axios.get(
-            `/api/v1/blog/${username}?page=` + currentPage,
-          );
+          url = `/api/v1/blog/${username}?page=` + currentPage;
         } else {
-          response = await axios.get(endpoint + currentPage);
+          url = endpoint + currentPage;
         }
+        if (searchTitle.trim() !== "") {
+          url += `&title=${searchTitle}`;
+        }
+        const response = await axios.get(url);
         setBlogs(response.data.data.blogs);
         setPageCount(response.data.data.count);
       } catch (e) {
@@ -28,18 +35,60 @@ export default function BlogList({ pageTitle, endpoint, operations }) {
       }
     }
     loadBlogs();
-  }, [pageTitle, endpoint, currentPage]);
+  }, [pageTitle, endpoint, currentPage, triggerChange]);
 
   useEffect(() => {
     setCurrentPage(1);
   }, [endpoint]);
 
+  const cancelSearch = () => {
+    setSearchTitle("");
+    setCurrentPage(1);
+    setTriggerChange(prev => !prev);
+  }
+
+  const delelteBlog = async (id) => {
+    try{
+      const response = await axios.delete(`/api/v1/blog/${id}`);
+      if(blogs.length == 1){
+        setCurrentPage((prev) => {
+          if(prev == 1){
+            return prev;
+          }
+          return prev - 1;
+        });
+      }
+      setTriggerChange(prev => !prev);
+    } catch(e) {
+      console.log("Failed Delete the blog", e);
+    }
+  }
+
+  const searchTrigger = () => {
+    setCurrentPage(1);
+    setTriggerChange(prev => !prev);
+  }
+  
   return (
     <div className="mt-[96px] flex justify-center items-center px-[286px]">
       <div className="w-full">
+        <div className="flex flex-row justify-between">
           <h1 className="text-3xl font-bold">
             {pageTitle === "" ? username + "'s" : pageTitle} Posts
           </h1>
+          <div className="flex flex-row rounded-sm overflow-hidden bg-gray-300">
+            <div className="flex flex-row rounded-md p-2">
+              <input
+                type="text"
+                value={searchTitle}
+                className="outline-none"
+                onChange={(e) => setSearchTitle(e.target.value)}
+              />
+              {searchTitle !== "" && <button onClick={cancelSearch} className="cursor-pointer"><MdCancel /></button>}
+            </div>
+            <button className="cursor-pointer p-2 bg-blue-500" onClick={searchTrigger}>Search</button>
+          </div>
+        </div>
         <div className="h-[386px] flex flex-col gap-2 justify-start mt-2">
           {blogs.length === 0 && (
             <div className="flex justify-center items-center h-full">
@@ -51,15 +100,15 @@ export default function BlogList({ pageTitle, endpoint, operations }) {
               <div key={blog.id}>
                 <div className="flex flex-row justify-between">
                   <Link
-                    to={`/article/${blog.id}`}
+                    to={`/blog/${blog.id}`}
                     className="underline text-blue-600"
                   >
                     {blog.title}
                   </Link>
                   {endpoint === "/api/v1/blog/me?page=" && (
-                    <div className="flex">
-                      <div>Update</div>
-                      <div>Delete</div>
+                    <div className="flex gap-2">
+                      <Link to={`/blog/${blog.id}/update`} className="bg-gray-300 flex justify-center items-center p-1 cursor-pointer rounded-md"><GoPencil /></Link>
+                      <button className="bg-gray-300 flex justify-center items-center p-1 cursor-pointer rounded-md" onClick={() => delelteBlog(blog.id)}><FaRegTrashAlt /></button>
                     </div>
                   )}
                 </div>
