@@ -4,25 +4,12 @@ import { asyncHandler } from "../utils/AsyncHandler.js";
 import {Comment} from '../models/comment.model.js';
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { User } from "../models/user.model.js";
+import { CommentService } from "../services/comments.service.js";
 
 export const addComment = asyncHandler(async (req, res) => {
     const {id, message} = req.body;
 
-    if(!id || !message || id?.trim() === "" || message?.trim() === "") {
-        throw new ApiError(400, "id or comment shouldn't be empty");
-    }
-
-    const comment = await Comment.create({
-        author: req.user.username,
-        message: message,
-        blog: id
-    });
-
-    const createdComment = await Comment.findByPk(comment.id);
-
-    if(!createdComment) {
-        throw new ApiError(500,"Internal Server Error while creating comment");
-    }
+    await CommentService.addComment(id, message, req.user.username);
 
     res.status(201).send(new ApiResponse(201, "Added Comment"));
 });
@@ -30,16 +17,8 @@ export const addComment = asyncHandler(async (req, res) => {
 export const getComments = asyncHandler(async (req, res) => {
     const id = req.body?.id;
 
-    if(!id || id?.trim() === "") {
-        throw new ApiError(400, "Blog id shouldn't be null or empty");
-    }
-
-    const comments = await Comment.findAll({
-        where: {
-            blog: id
-        }
-    });
-
+    const comments = await CommentService.getComments(id);
+    
     res.status(200).send(new ApiResponse(200,"Got all comments",{
         comments:comments
     }));
