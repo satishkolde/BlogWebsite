@@ -12,6 +12,21 @@ export default function BlogCreate() {
 
   const [is_published,setIsPublished] = useState(false);
 
+  useEffect(() => {
+    async function loadBlog() {
+      try{
+        const response = await axios.get(`/api/v1/blog/specific/${id}`);
+        setFormData((prev) => ({...prev,title: response.data.data.title,body:response.data.data.body}));
+        setIsPublished(response.data.data.is_published);
+      }catch(e) {
+        console.log("Error while loading specific blog");
+      }
+    }
+    if(id) {
+      loadBlog();
+    }
+  },[]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     if(name === "title" && value.length > 100) {
@@ -27,11 +42,21 @@ export default function BlogCreate() {
     try {
       const response = await axios.post("/api/v1/blog/", {...formData,is_published});
       const id = response.data.data.blog.id;
-      navigator(`/article/${id}`);
+      navigator(`/blog/${id}`);
     } catch (e) {
       navigator("/");
     }
   };
+
+  const updateBlog = async () => {
+    try {
+      const response = await axios.patch(`/api/v1/blog/${id}`, {...formData,is_published});
+      navigator(`/blog/${id}`);
+    } catch (e) {
+      console.log(e);
+      navigator("/");
+    }
+  }
 
   return (
     <div className="mt-[96px] px-[286px]">
@@ -77,12 +102,8 @@ export default function BlogCreate() {
         <div>
           <p className="text-red-500 font-semibold"></p>
         </div>
-        <button
-          className="p-2 bg-blue-600 rounded-md text-white font-semibold cursor-pointer"
-          onClick={createBlog}
-        >
-          Create
-        </button>
+        {!id ? <button className="p-2 bg-blue-600 rounded-md text-white font-semibold cursor-pointer" onClick={createBlog}>Create</button>:
+        <button className="p-2 bg-blue-600 rounded-md text-white font-semibold cursor-pointer" onClick={updateBlog}>Update</button>}
       </div>
     </div>
   );
