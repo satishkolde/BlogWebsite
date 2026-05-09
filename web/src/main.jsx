@@ -21,8 +21,10 @@ createRoot(document.getElementById('root')).render(
         <Route index element={<BlogList pageTitle="Blog" endpoint="/api/v1/blog/pagination?page=" />} />
         <Route path="myposts" element={<BlogList pageTitle="My" endpoint="/api/v1/blog/me?page=" />} />
         <Route path="/:username" element={<BlogList pageTitle="" endpoint="" />} />
-        <Route path="article/:id" element={<Blog />} />
-        <Route path="create" element={<BlogCreate isUpdate={false} endpoint="/api/v1/blog/"  />} />
+        <Route path="blog/" element={<BlogCreate />} />
+        <Route path="blog/:id" element={<Blog />} />
+        <Route path="blog/:id/update" element={<BlogCreate />} />
+        <Route path="create" element={<BlogCreate />} />
       </Route>
       <Route element={<AuthLayout />}>
         <Route path="register" element={<Register />} />
