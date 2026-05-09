@@ -14,7 +14,7 @@ export default function Blog() {
     useEffect(() => {
         async function loadBlog()  {
             try {
-                const response = await axios.post("/api/v1/blog/specific",{id});
+                const response = await axios.get(`/api/v1/blog/specific/${id}`);
                 setTitle(response.data.data.title);
                 setBody(response.data.data.body);
             } catch (e) {
@@ -27,7 +27,7 @@ export default function Blog() {
     useEffect(() => {
         async function loadComments() {
             try {
-                const response = await axios.post("/api/v1/comment/get", {id});
+                const response = await axios.get(`/api/v1/comment/get/${id}`);
                 setComments(response.data.data.comments);
             } catch(e) {
                 console.log(e);
