@@ -47,7 +47,7 @@ export default function BlogList({ pageTitle, endpoint, operations }) {
     setTriggerChange(prev => !prev);
   }
 
-  const delelteBlog = async (id) => {
+  const deleteBlog = async (id) => {
     try{
       const response = await axios.delete(`/api/v1/blog/${id}`);
       if(blogs.length == 1){
@@ -108,7 +108,7 @@ export default function BlogList({ pageTitle, endpoint, operations }) {
                   {endpoint === "/api/v1/blog/me?page=" && (
                     <div className="flex gap-2">
                       <Link to={`/blog/${blog.id}/update`} className="bg-gray-300 flex justify-center items-center p-1 cursor-pointer rounded-md"><GoPencil /></Link>
-                      <button className="bg-gray-300 flex justify-center items-center p-1 cursor-pointer rounded-md" onClick={() => delelteBlog(blog.id)}><FaRegTrashAlt /></button>
+                      <button className="bg-gray-300 flex justify-center items-center p-1 cursor-pointer rounded-md" onClick={() => deleteBlog(blog.id)}><FaRegTrashAlt /></button>
                     </div>
                   )}
                 </div>
