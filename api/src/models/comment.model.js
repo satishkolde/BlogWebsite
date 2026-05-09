@@ -15,7 +15,9 @@ Comment.init({
             model: "users",
             key: "username"
         },
-        allowNull: false
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+        allowNull: false,
     },
     blog: {
         type: DataTypes.UUID,
@@ -23,6 +25,8 @@ Comment.init({
             model: "blogs",
             key: "id"
         },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
         allowNull: false
     },
     message: {
