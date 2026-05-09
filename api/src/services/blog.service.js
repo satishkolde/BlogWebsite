@@ -84,7 +84,7 @@ export class BlogService {
         return blog;
     }
 
-    static async getSpecificBlog(author, id) {
+    static async getSpecificBlog(id) {
         if (!id || id?.trim() === "") {
             throw new ApiError(400, "Blog id is required to get the blog");
         }

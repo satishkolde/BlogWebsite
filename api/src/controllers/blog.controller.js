@@ -50,7 +50,7 @@ export const getUserPublicBlogController = asyncHandler(async (req, res) => {
 export const getSpecificBlogController = asyncHandler(async (req, res) => {
     const id = req.params?.id;
     
-    const blog = await BlogService.getSpecificBlog(req.user.username,id);
+    const blog = await BlogService.getSpecificBlog(id);
     
     res.status(200).send(new ApiResponse(200, "Got the Specific blog", blog));
 });
