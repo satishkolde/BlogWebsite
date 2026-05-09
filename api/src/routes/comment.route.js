@@ -6,6 +6,6 @@ const route = Router();
 
 route.use(verifyJwt);
 route.route("/add").post(addComment);
-route.route("/get").post(getComments);
+route.route("/get/:id").get(getComments);
 
 export default route;

@@ -15,7 +15,7 @@ export const addComment = asyncHandler(async (req, res) => {
 });
 
 export const getComments = asyncHandler(async (req, res) => {
-    const id = req.body?.id;
+    const id = req.params?.id;
 
     const comments = await CommentService.getComments(id);
     
