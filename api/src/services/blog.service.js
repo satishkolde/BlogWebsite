@@ -59,7 +59,7 @@ export class BlogService {
             blog.body = body;
         }
 
-        if (is_published) {
+        if (is_published !== undefined) {
             blog.is_published = is_published;
         }
         const updatedBlog = await blog.save();
