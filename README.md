@@ -111,11 +111,9 @@ DB_NAME=blog_db
 
 # JWT Configuration
 ACCESS_TOKEN_SECRET_KEY=your_secret_key_here
-REFRESH_TOKEN_SECRET_KEY=your_refresh_token_secret_key_here
 
 # Server
 PORT=4000
-NODE_ENV=development
 ```
 
 **Generate secure secret keys:**
@@ -185,52 +183,6 @@ Blog/
 
 ---
 
-## 🧪 Running Tests (Future)
-
-```bash
-cd api
-npm test
-
-cd ../web
-npm test
-```
-
----
-
-## 🏗️ Database Schema
-
-### Users Table
-```
-- id (UUID, Primary Key)
-- username (String, Unique)
-- password (String, Hashed)
-- createdAt (Timestamp)
-- updatedAt (Timestamp)
-```
-
-### Blogs Table
-```
-- id (UUID, Primary Key)
-- title (String, Max 100 chars)
-- body (Text)
-- author (String, FK → users.username)
-- is_published (Boolean, Default: true)
-- createdAt (Timestamp)
-- updatedAt (Timestamp)
-```
-
-### Comments Table
-```
-- id (UUID, Primary Key)
-- body (Text)
-- author (String, FK → users.username)
-- blog_id (UUID, FK → blogs.id)
-- createdAt (Timestamp)
-- updatedAt (Timestamp)
-```
-
----
-
 ## 📝 Common Tasks
 
 ### Create a Blog
@@ -292,39 +244,6 @@ npm run dev
 # Verify vite proxy configuration in vite.config.js
 # Check browser DevTools Network tab for failed requests
 ```
-
----
-
-## 📊 Project Status & Ratings
-
-### Backend Quality: 9/10
-- ✅ Service layer architecture
-- ✅ RESTful API design
-- ✅ Proper error handling
-- ⏳ Missing: Unit tests
-
-### Frontend Quality: 7.5/10
-- ✅ Component-based structure
-- ✅ Responsive design
-- ✅ State management
-- ⏳ Missing: Error boundaries, loading states
-
-### Overall Project: 8.2/10
-- ✅ Functional full-stack application
-- ✅ Good code organization
-- ⏳ Needs: Tests, API docs, production config
-
----
-
-## 🚀 Next Steps for Production
-
-1. **Testing:** Add Jest/Vitest for unit & integration tests
-2. **Documentation:** Generate API docs with Swagger/OpenAPI
-3. **Security:** Add rate limiting, request validation
-4. **Logging:** Implement centralized logging
-5. **Deployment:** Docker setup for containerization
-6. **CI/CD:** GitHub Actions for automated testing
-7. **Monitoring:** Add error tracking (Sentry, etc.)
 
 ---
 
