@@ -11,7 +11,7 @@ Comment.init({
     },
     author: {
         type: DataTypes.STRING,
-        refrences: {
+        references: {
             model: "users",
             key: "username"
         },
@@ -21,7 +21,7 @@ Comment.init({
     },
     blog: {
         type: DataTypes.UUID,
-        refrences: {
+        references: {
             model: "blogs",
             key: "id"
         },
